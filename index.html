@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My calci</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="output" id="output">
+        <ul>
+          <li id="l1"></li>
+          <li id="l2"></li>
+          <li id="l3"></li>
+        </ul>
+      </div>
+      <div class="buttonPane">
+        <div class="numbers" id="num">
+          <button>1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button>7</button>
+          <button>8</button>
+          <button>9</button>
+          <button>0</button>
+          <button>.</button>
+        </div>
+        <div class="operator" id="operator">
+          <button>+</button>
+          <button>-</button>
+          <button>*</button>
+          <button>/</button>
+          <button>%</button>
+          <button>=</button>
+          <button>C</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <style type="text/css">
+    body{
+      box-shadow: 0px 0px 6px 0px black;
+      padding: 10px;
+    }
+    .output{
+      border: 1px solid black;
+    }
+    .buttonPane{
+      display: flex;
+      margin-top: 10px;
+    }
+    .numbers,.operator{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-right: 10px;
+    }
+    button{
+      margin: 5px;
+      width: 50px;
+      height: 50px;
+
+    }
+    ul{
+      margin: 0px;
+    }
+    li{
+      font-size: 20px;
+      height: 20px;
+      list-style: none;
+      text-align: right;
+      padding: 10px;
+    }
+  </style>
+  <script>
+    var l1 = document.getElementById("l1"),
+    l2=document.getElementById("l2"),
+    l3=document.getElementById("l3"),
+    nums = document.getElementById("num"),
+    op = document.getElementById("operator");
+
+    nums.addEventListener('click',function(event){
+      if(event.target.tagName.toLowerCase() == 'button'){
+        if(event.target.innerText.match(/\./)&&l3.innerHTML.match(/\./)){
+          return;
+        }
+        l3.innerHTML += event.target.innerText;
+        if(!l2.innerHTML){
+          l1.innerHTML = "";
+        }
+      }
+    })
+
+    op.addEventListener('click',function(event){
+      if(event.target.tagName.toLowerCase() == 'button'){
+        switch(event.target.innerText){
+          case '=' :
+            if(!l3.innerHTML){
+              return;
+            }
+            if(l2.innerHTML){
+              l1.innerHTML = equal();
+              l2.innerHTML = "";
+              l3.innerHTML = "";
+            }
+            break;
+          case 'C' :
+            if(l3.innerHTML){
+              l3.innerHTML = l3.innerText.substr(0,l3.innerText.length-1);
+            }else{
+              l1.innerHTML = "";
+              l2.innerHTML = "";
+            }
+            break;
+          default :
+            if(!l3.innerHTML){
+              if(l1.innerHTML){
+                l2.innerHTML = event.target.innerText;
+                return;
+              }return;                    
+            }
+            if(l1.innerHTML){
+              l1.innerHTML = equal();
+            }else{            
+              l1.innerHTML = l3.innerHTML;
+            }
+            l2.innerHTML = event.target.innerText;
+            l3.innerHTML = "";
+        }
+      }
+    })
+    function equal(){
+      let operate = {
+        ['+'] :()=>parseFloat(l1.innerHTML)+parseFloat(l3.innerHTML),
+        ['-'] :()=>parseFloat(l1.innerHTML)-parseFloat(l3.innerHTML),
+        ['/'] :()=>parseFloat(l1.innerHTML)/parseFloat(l3.innerHTML),
+        ['*'] :()=>parseFloat(l1.innerHTML)*parseFloat(l3.innerHTML),
+        ['%'] :()=>parseFloat(l1.innerHTML)%parseFloat(l3.innerHTML),
+      };
+      return operate[l2.innerHTML]();
+    }
+  </script>
+</html>
