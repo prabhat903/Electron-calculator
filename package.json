@@ -1,15 +1,46 @@
 {
   "name": "electron_calculator",
   "version": "1.0.0",
-  "description": "",
+  "description": "My created Calci",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "postinstall": "install-app-deps",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "author": "",
+  "author": "Prabhat",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^7.1.3"
+    "electron": "^7.1.3",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.1.1"
+  },
+  "build": {
+    "appId": "appcalci",
+    "dmg": {
+      "contents": [
+        {
+          "x": 360,
+          "y": 430
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
   }
 }
